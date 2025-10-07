@@ -1,0 +1,36 @@
+-------TABLE AND TYPE-------
+
+SANPHAM(masp varchar(10)(pk), tensp nvarchar(50), loại nvarchar(50), dongia int)
+
+GIACAM(masp varchar(10)(pk)(fk), loài nvarchar(50), tuoi nvarchar(50))
+
+GIASUC(masp varchar(10)(pk)(fk), loài nvarchar(50), thoiki nvarchar(50))
+
+QUANLY(manv varchar(10)(pk), hoten nvarchar(50), quequan nvarchar(50), sodt varchar(10))
+
+THANNHAN(manv varchar(10)(pk)(fk), hoten nvarchar(50), moiquanhe nvarchar(20), gioitinh nvarchar(5), ngaysinh date)
+
+CUAHANG(mach varchar(10)(pk), tench nvarchar(50), sodt varchar(10), manv varchar(10)(fk))
+
+SOHUU(mach varchar(10)(pk)(fk), masp varchar(10)(pk)(fk))
+
+PHIEU_NHAPHANG(sophieu varchar(10)(pk), tensp nvarchar(50), soluong int, dongia int, ngaynhap date, mach varchar(10)(fk))
+
+------RELATIONSHIP------
+
+RelationName: SOHUU
+Entities: CUAHANG-SANPHAM
+Relationship: N-N
+
+RelationName: QUANLY
+Entities: QUANLY-CUAHANG
+Relationship: 1-1
+
+RelationName: NHAPHANG
+Entities: CUAHANG-PHIEU_NHAPHANG
+Relationship: 1-N
+
+RelationName: THANNHAN
+Entities: QUANLY-THANNHAN
+Relationship: 1-N (strong-weak)
+

@@ -1,0 +1,206 @@
+\documentclass[13pt]{report}
+\usepackage[utf8]{vietnam}
+\usepackage[paperheight=29.7cm,paperwidth=21cm,right=2cm,left=3cm,top=2cm,bottom=2.5cm]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage{multirow}
+\usepackage{geometry}
+\newcommand{\chapterhead}[1]{
+{\fontsize{18pt}{20pt}\selectfont\bfseries #1}
+}
+\usepackage{tocloft}
+\setcounter{tocdepth}{3}
+%\usepackage{hyperref}  %mục lục tự động
+\geometry{a4paper, margin=1in}
+\usepackage{indentfirst} % Thư viện thụt đầu dòng
+\usepackage{graphicx}
+\usepackage{subfig}
+%\usepackage{natbib}
+\def\BibTeX{{\centering \bfseries \fontsize{18pt}{18pt}\selectfont }}
+\usepackage{color}
+\usepackage{titlesec} 
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{indentfirst}
+\usepackage{float}
+\usepackage{longtable}
+
+%\titlespacing*{\subsection}{0pt}{6pt}{0pt} % Heading 2
+\titleformat*{\section}{\filright\fontsize{16pt}{0pt}\selectfont \bfseries}
+\titleformat*{\subsection}{\filright\fontsize{16pt}{0pt}\selectfont \bfseries}
+\titleformat*{\subsubsection}{\filright\fontsize{14pt}{0pt}\selectfont \bfseries}
+\usepackage{enumitem} % Gói hỗ trợ tùy chỉnh danh sách
+ %thụt dòng 2.5cm
+\renewcommand{\baselinestretch}{1.3} % Giãn dòng 1.5
+\setlength{\parskip}{0.3pt} % Spacing after
+\setlength{\parindent}{1.5cm} % Set khoảng cách thụt đầu dòng mỗi đoạn
+\title{empty}
+\thispagestyle{empty} %trang không đánh số trang
+\renewcommand\thesection{\arabic{section}}
+\usepackage{fancyhdr}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+\allowdisplaybreaks
+
+\begin{document}
+	\fontsize{15pt}{15pt}\selectfont
+	\begin{center}
+		\textbf{TỔNG LIÊN LIÊN ĐOÀN LAO ĐỘNG VIỆT NAM \\TRƯỜNG ĐẠI HỌC TÔN ĐỨC THẮNG\\ KHOA CÔNG NGHỆ THÔNG TIN}\\
+	\end{center}
+	%\maketitle
+	\vspace{1cm}
+	\begin{figure}[h]
+		\centering
+		\includegraphics[width=0.3\linewidth]{img/Logo.png}
+	\end{figure}	
+	\fontsize{18pt}{18pt}\selectfont
+	\begin{center}
+		\textbf{MÔN HỌC: THIẾT KẾ MẠNG}
+	\end{center}
+	\vspace{1cm}
+	\fontsize{18pt}{16pt}\selectfont
+	\begin{center}\Huge
+		\textbf{Thiết Kế Hệ Thống Mạng Toàn Diện Cho Công Ty SmartTech Với \\3 Phòng Ban Và Trung Tâm Dữ Liệu }	
+	\end{center}
+    \vspace{2cm}
+    \fontsize{16pt}{16pt}\selectfont
+    \begin{flushright}
+        \textbf{Người hướng dẫn: Ths. LÊ VIẾT THANH\\ Họ và tên: Võ Mạnh Cường - 52200319 \\ Võ Thị Lan Chi - 52200320\\Nhóm: 03}
+    \end{flushright}
+	\vspace{2cm}
+	\begin{center}
+		\textbf{HỒ CHÍ MINH – 2024}
+	\end{center}
+    \newpage
+    \fontsize{15pt}{15pt}\selectfont
+	\begin{center}
+		\textbf{TỔNG LIÊN LIÊN ĐOÀN LAO ĐỘNG VIỆT NAM \\TRƯỜNG ĐẠI HỌC TÔN ĐỨC THẮNG\\ KHOA CÔNG NGHỆ THÔNG TIN}\\
+	\end{center}
+	%\maketitle
+	\vspace{1cm}
+	\begin{figure}[h]
+		\centering
+		\includegraphics[width=0.3\linewidth]{img/Logo.png}
+	\end{figure}	
+	\fontsize{18pt}{18pt}\selectfont
+	\begin{center}
+		\textbf{MÔN HỌC: THIẾT KẾ MẠNG}
+	\end{center}
+	\vspace{1cm}
+	\fontsize{18pt}{16pt}\selectfont
+	\begin{center}\Huge
+		\textbf{Thiết Kế Hệ Thống Mạng Toàn Diện Cho Công Ty SmartTech Với \\3 Phòng Ban Và Trung Tâm Dữ Liệu }	
+	\end{center}
+    \vspace{2cm}
+    \fontsize{16pt}{16pt}\selectfont
+    \begin{flushright}
+        \textbf{Người hướng dẫn: Ths. LÊ VIẾT THANH\\ Họ và tên: Võ Mạnh Cường - 52200319 \\ Võ Thị Lan Chi - 52200320\\Nhóm: 03}
+    \end{flushright}
+	\vspace{2cm}
+	\begin{center}
+		\textbf{HỒ CHÍ MINH – 2024}
+	\end{center}
+    \newpage
+    \fontsize{15pt}{18pt}\selectfont
+    \section*{\centering LỜI CẢM ƠN}
+    Chúng em xin chân thành gửi lời cảm ơn sâu sắc đến ThS. Lê Viết Thanh đã tận tình giảng dạy, hỗ trợ và truyền đạt kiến thức trong suốt quá trình học tập. Nhờ sự hướng dẫn của thầy, em đã xây dựng được nền tảng lý thuyết vững chắc để hoàn thành bài báo cáo cuối kì.
+
+    Tuy nhiên chúng em còn hạn chế nhiều về môn \textit{Thiết kế mạng} nên không thể tránh khỏi những thiếu sót trong quá trình hoàn thành bài báo cáo cuối kỳ này. Mong thầy xem và góp ý để bài báo cáo của em được cải thiện hơn.
+
+    Em xin chân thành cảm ơn thầy vì đã hỗ trợ em trong quá trình thực hiện bài báo cáo này!
+
+    \newpage
+    \section*{\centering CÔNG TRÌNH ĐƯỢC HOÀN THÀNH \\ TẠI TRƯỜNG ĐẠI HỌC TÔN ĐỨC THẮNG}
+    Tôi xin cam đoan đây là sản phẩm đồ án của riêng chúng tôi và được sự hướng dẫn của ThS. Lê Viết Thanh. Các nội dung nghiên cứu, kết quả trong đề tài này là trung thực và chưa công bố dưới bất kỳ hình thức nào trước đây. Những số liệu trong các bảng biểu phục vụ cho việc phân tích, nhận xét, đánh giá được chính tác giả thu thập từ các nguồn khác nhau có ghi rõ trong phần tài liệu tham khảo.
+    
+    Ngoài ra, trong đồ án còn sử dụng một số nhận xét, đánh giá cũng như số liệu của các tác giả khác, cơ quan tổ chức khác đều có trích dẫn và chú thích nguồn gốc.
+    
+    \textbf{Nếu phát hiện có bất kỳ sự gian lận nào chúng tôi xin hoàn toàn chịu trách nhiệm về nội dung đồ án của mình}. Trường đại học Tôn Đức Thắng không liên quan đến những vi phạm tác quyền, bản quyền do chúng tôi gây ra trong quá trình thực hiện (nếu có).
+    \begin{center}
+    \textit{
+        \hspace*{6cm}TP.Hồ Chí Minh, Ngày ... tháng ... năm \\
+    	\hspace*{7cm}Tác giả\\
+    	\hspace*{7cm}(ký và ghi rõ họ tên)\\
+    	\vspace*{0.2cm}
+    	\vspace*{2cm}
+    	\hspace*{7cm}Võ Mạnh Cường\\
+        \hspace*{7cm}Võ Thị Lan Chi\\
+        \vspace*{0.2cm}
+    }
+    \end{center}
+    \newpage
+    \section*{\centering TÓM TẮT}
+
+    Báo cáo này tập trung vào quá trình thiết kế, triển khai và đánh giá một hệ thống mạng toàn diện, đáp ứng các yêu cầu về hiệu suất, bảo mật và quản lý cho một doanh nghiệp. Nội dung được chia thành bốn chương, bao quát từ lý thuyết nền tảng đến thực tiễn ứng dụng.
+    \begin{itemize}
+        \item \textbf{Chương 1:} Giới thiệu tổng quan về đề tài, bao gồm mục tiêu nghiên cứu, phương pháp thực hiện và cơ sở lý thuyết. Phần này giải thích các khái niệm cơ bản như mô hình mạng, topology, các giao thức mạng phổ biến, và mạng ảo VPN. Đây là cơ sở để định hình các bước tiếp theo trong việc phân tích và thiết kế hệ thống.
+        \item \textbf{Chương 2:} Tập trung phân tích thiết kế hệ thống. Nội dung bao gồm sơ đồ cấu trúc tổ chức công ty, yêu cầu hệ thống, tính toán thông số kỹ thuật, đề xuất loại dây cáp sử dụng, sơ đồ luận lý và sơ đồ vật lý. Các thông tin chi tiết về VLAN, kết nối port, và quy hoạch địa chỉ IP cũng được trình bày.
+        \item \textbf{Chương 3:} Trình bày quá trình triển khai thực tế của hệ thống mạng. Các bước cấu hình thiết bị mạng và máy chủ được thực hiện nhằm đảm bảo tính ổn định và hiệu quả vận hành.
+        \item \textbf{Chương 4:} Đánh giá hiệu quả của hệ thống sau khi triển khai.Đồng thời, chương này cũng đề xuất các phương án quản lý và bảo trì hệ thống nhằm đảm bảo sự ổn định, bảo mật và khả năng mở rộng trong tương lai.
+    \end{itemize}
+
+    Báo cáo không chỉ nhấn mạnh tầm quan trọng của việc thiết kế một hệ thống mạng hiện đại mà còn chú trọng vào tính thực tiễn trong triển khai. Qua đó, tài liệu này cung cấp một hướng dẫn cụ thể và chi tiết, giúp doanh nghiệp xây dựng một hạ tầng mạng mạnh mẽ, linh hoạt, đáp ứng tốt các yêu cầu kinh doanh và kỹ thuật hiện tại cũng như trong tương lai.
+
+   \newpage
+    \begin{center}
+        \tableofcontents
+        \newpage
+        \listoffigures %Danh mục hình vẽ
+        \newpage
+        \listoftables
+    \end{center}
+
+    
+    \newpage
+    \input danhmucviettat
+  
+    \newpage
+    \pagenumbering{arabic}
+
+    \input chapter1
+
+    \newpage
+    \input chapter2
+
+    \newpage
+    \input chapter3
+
+    \newpage
+    \input chapter4
+\newpage
+ \section*{\centering \fontsize{18pt}{20pt}\selectfont KẾT LUẬN}
+\addcontentsline{toc}{section}{\textbf{KẾT LUẬN}}
+
+Trong thời đại công nghệ phát triển không ngừng, việc xây dựng và quản lý một hệ thống mạng hiệu quả, bảo mật và ổn định là yếu tố then chốt đối với mọi tổ chức, đặc biệt trong các doanh nghiệp hiện đại. Qua quá trình nghiên cứu, phân tích và triển khai, đồ án đã đạt được những kết quả sau:
+
+Đồ án đã xây dựng mô hình mạng chi tiết, đáp ứng được yêu cầu của tổ chức. Các mô hình logic và vật lý được thiết kế dựa trên nguyên tắc phân đoạn mạng bằng VLAN, sử dụng các giao thức mạng hiện đại như VXLAN, OSPF, và VPN để đảm bảo khả năng mở rộng và bảo mật cao.
+
+Toàn bộ hệ thống được cấu hình đầy đủ với các thiết bị hiện đại như switch layer 3, firewall, server và đường truyền tốc độ cao. Các thành phần đã được kết nối và cấu hình theo đúng sơ đồ đề xuất, đảm bảo tính ổn định và hiệu suất trong quá trình vận hành.
+
+Hệ thống đã được kiểm tra thông qua các bài kiểm tra chức năng như truyền dữ liệu giữa các VLAN, bảo mật truy cập thông qua firewall và tính ổn định của các kết nối dự phòng. Kết quả cho thấy hệ thống hoạt động ổn định, hiệu quả và đáp ứng tốt các yêu cầu của tổ chức.
+
+Đồ án đã đề xuất các phương pháp quản lý và bảo trì hệ thống, bao gồm giám sát thiết bị mạng, cập nhật phần mềm, sao lưu dữ liệu và quy hoạch IP chi tiết. Điều này giúp hệ thống luôn hoạt động hiệu quả và giảm thiểu các rủi ro tiềm ẩn trong quá trình vận hành.
+
+Hệ thống mạng được thiết kế và triển khai không chỉ đáp ứng được yêu cầu ban đầu của tổ chức mà còn đảm bảo tính linh hoạt, khả năng mở rộng trong tương lai. Đây sẽ là nền tảng vững chắc cho việc phát triển các ứng dụng và dịch vụ công nghệ thông tin, giúp doanh nghiệp tối ưu hóa hiệu suất làm việc và nâng cao tính cạnh tranh.
+    
+\newpage
+     
+\addcontentsline{toc}{section}{\textbf{TÀI LIỆU THAM KHẢO}}
+\begin{thebibliography}{00}
+
+\bibitem{b1} Khái niệm, lợi ích và phân loại VPN. (2016, 5 16). https://vnpro.vn/thu-vien/khai-niem-loi-ich-va-phan-loai-vpn-2414.html
+
+\bibitem{b2} Trường Đại học Tôn Đức Thắng, Ths Lê, T. V. (2024). Thiết kế mạng doanh nghiệp.
+
+
+\bibitem{b3}
+
+\bibitem{b4} 
+
+\bibitem{b5}
+
+\end{thebibliography}
+\end{document}
+
+
+

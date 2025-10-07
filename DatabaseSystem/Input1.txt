@@ -1,0 +1,61 @@
+Entity: SANPHAM
+Attributes:
+    masp: varchar(10)(pk)
+    tensp: nvarchar(50)
+    loại: nvarchar(50)
+    dongia: int 
+
+Entity: GIACAM
+Attributes:
+    masp: varchar(10)(pk)(fk)
+    loài: nvarchar(50)
+    tuoi: nvarchar(50)
+
+Entity: GIASUC
+Attributes:
+    masp: varchar(10)(pk)(fk)
+    loài: nvarchar(50)
+    thoiki: nvarchar(50)
+
+Entity: QUANLY
+Attributes:
+    manv: varchar(10)(pk)
+    hoten: nvarchar(50)
+    quequan: nvarchar(50)
+    sodt: varchar(10)
+    
+Entity: THANNHAN
+Attributes:
+    manv: varchar(10)(pk)(fk)
+    hoten: nvarchar(50)
+    moiquanhe: nvarchar(20)
+    gioitinh: nvarchar(5)
+    ngaysinh: date
+
+Entity: CUAHANG
+Attributes:
+    mach: varchar(10)(pk)
+    tench: nvarchar(50)
+    sodt: varchar(10)
+    manv: varchar(10)(fk)
+
+Entity: SOHUU
+Attributes:
+    mach: varchar(10)(pk)(fk)
+    masp: varchar(10)(pk)(fk)
+
+Entity: PHIEU_NHAPHANG
+Attributes: 
+    sophieu: varchar(10)(pk)
+    tensp: nvarchar(50)
+    soluong: int 
+    dongia: int 
+    ngaynhap: date
+    mach: varchar(10)(fk)
+
+Relation: SOHUU, CUAHANG-SANPHAM, N-N 
+Relation: QUANLY, QUANLY-CUAHANG, 1-1
+Relation: NHAPHANG, CUAHANG-PHIEU_NHAPHANG, 1-N 
+Relation: THANNHAN, QUANLY-THANNHAN, 1-N (strong-weak)
+
+    

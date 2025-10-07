@@ -1,0 +1,24 @@
+Table: SANPHAM
+Functional Dependency: masp -> tensp; masp -> loại; tensp,loại -> dongia 
+
+Table: GIACAM
+Functional Dependency: masp -> loài; masp -> tuoi
+
+Table: GIASUC
+Functional Dependency: masp -> loài; masp -> thoiki
+
+Table: QUANLY
+Functional Dependency: manv -> hoten; manv,hoten -> quequan,sodt
+
+Table: THANNHAN
+Functional Dependency: manv -> hoten,moiquanhe,gioitinh,ngaysinh
+
+Table: CUAHANG
+Functional Dependency: mach -> tench,sodt,manv 
+
+Table: SOHUU
+Functional Dependency: mach,masp -> mach; mach,masp -> masp
+
+Table: PHIEU_NHAPHANG
+Functional Dependency: sophieu -> tensp,soluong,ngaynhap,mach; tensp -> dongia
+ 

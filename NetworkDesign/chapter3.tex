@@ -1,0 +1,269 @@
+\chapterhead{CHƯƠNG 3 $-$ TRIỂN KHAI HỆ THỐNG}
+\addcontentsline{toc}{chapter}{CHƯƠNG 3 $-$ TRIỂN KHAI HỆ THỐNG}
+\section*{3.1 Cấu hình thiết bị}
+\addcontentsline{toc}{section}{3.1 Cấu hình thiết bị}
+\textbf{Cấu hình ASAv-1 và ASAv-2}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|p{3.5cm}|p{3.5cm}|p{9.5cm}|}
+\hline
+\multicolumn{3}{|c|}{ASAv-2} \\
+\hline
+\textbf{Cấu hình Interface} & end & access-list INSIDE-TO-OUTSIDE extended permit ip any any \\
+config ter	&wr&	access-group INSIDE-TO-OUTSIDE in interface Inside \\
+
+interface G0/1	&\textbf{Cấu hình OSPF}&	access-list OUTSIDE-TO-INSIDE extended permit ip any any\\
+nameif Inside	&config ter&	access-group OUTSIDE-TO-INSIDE in interface Outside\\
+security-level 100	&router ospf 1&	object network DMZ-NET\\
+ip address 10.10.10.5 255.255.255.0	&network 172.16.1.0 255.255.255.0 area 0&	subnet 10.10.70.0 255.255.255.0\\
+no shutdown	&network 10.10.0.0 255.255.0.0 area 0	&nat (DMZ,Outside) dynamic interface \\
+exit	&network 10.10.70.0 255.255.255.0 area 0&	exit \\
+
+interface G0/0	&exit&	access-list INSIDE-TO-DMZ extended permit ip any any\\
+nameif Outside	& route Outside 0.0.0.0 0.0.0.0 172.16.1.1 &	access-group INSIDE-TO-DMZ in interface Inside\\
+security-level 0	&end&	access-list DMZ-TO-INSIDE extended permit ip any any\\
+ip address dhcp setroute	&wr&	access-group DMZ-TO-INSIDE in interface DMZ\\
+no shutdown	&\textbf{Cấu hình NAT}&	access-list DMZ-TO-OUTSIDE extended permit ip any any\\
+exit	&config ter&	access-group DMZ-TO-OUTSIDE in interface DMZ\\
+interface G0/2	&object network INSIDE-NET&	access-list OUTSIDE-TO-DMZ extended permit ip any any\\
+nameif DMZ	&subnet 10.10.0.0 255.255.0.0&	access-group OUTSIDE-TO-DMZ in interface Outside\\
+ip address 10.10.70.1 255.255.255.0	&nat (Inside,Outside) dynamic interface&	end\\
+no shutdown	&exit&	wr\\
+\hline
+\end{tabular}
+\caption{Cấu hình chi tiết ASAv-1}
+\end{table}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|p{3.5cm}|p{3.5cm}|p{9.5cm}|}
+\hline
+\multicolumn{3}{|c|}{ASAv-2} \\
+\hline
+\textbf{Cấu hình Interface} & ciscoasa & access-list INSIDE-TO-OUTSIDE extended permit ip any any \\
+config ter	&ciscoasa&	access-group INSIDE-TO-OUTSIDE in interface Inside\\
+
+interface G0/1	&config ter&	access-list OUTSIDE-TO-INSIDE extended permit ip any any\\
+nameif Inside &router ospf 1&	access-group OUTSIDE-TO-INSIDE in interface Outside\\
+security-level 100	&network 172.16.2.0 255.255.0.0 area 0&object network DMZ-NET\\
+ip address 10.10.20.5 255.255.255.0	&network 10.10.0.0 255.255.0.0 area 0&		subnet 10.10.70.0 255.255.255.0\\
+no shutdown	&	network 10.10.70.0 255.255.255.0 area 0&nat (DMZ,Outside) dynamic interface \\
+exit	&exit&	exit\\
+interface G0/0	&route Outside 0.0.0.0 0.0.0.0 172.16.2.1&	access-list INSIDE-TO-DMZ extended permit ip any any\\
+nameif Outside	& end &	access-group INSIDE-TO-DMZ in interface Inside\\
+security-level 0	&wr&	access-list DMZ-TO-INSIDE extended permit ip any any\\
+ip address dhcp setroute	&\textbf{Cấu hình NAT}&	access-group DMZ-TO-INSIDE in interface DMZ\\
+no shutdown	&config ter&	access-list DMZ-TO-OUTSIDE extended permit ip any any\\
+exit	& object network INSIDE-NET&	access-group DMZ-TO-OUTSIDE in interface DMZ\\
+end	&subnet 10.10.0.0 255.255.0.0&	access-list OUTSIDE-TO-DMZ extended permit ip any any\\
+wr	&nat (Inside,Outside) dynamic interface&	access-group OUTSIDE-TO-DMZ in interface Outside\\
+\textbf{Cấu hình OSPF}&exit&	end\\
+enable& &	wr\\
+\hline
+\end{tabular}
+\caption{Cấu hình chi tiết ASAv-2}
+\end{table}
+
+\newpage
+\textbf{Cấu hình Router ISP}
+\begin{table}[H]
+\centering
+\begin{tabular}{|p{3cm}|p{3cm}|p{3cm}|p{3cm}|p{3cm}|}
+\hline
+\multicolumn{5}{|c|}{ISP} \\
+\hline
+\textbf{Interface Config} & \textbf{Tunnel Config} & \textbf{Routing} & \textbf{DHCP Config} & \textbf{VPN \& NAT} \\
+\hline
+enable & interface Tunnel0 & ip route 0.0.0.0 & ip dhcp excluded- & access-list 100 deny \\
+config terminal & ip address 10.1.1.1 & 0.0.0.0 & address 172.16.1.1 & gre any any \\
+ & 255.255.255.0 & 192.168.47.2 & 172.16.1.10 & \\
+interface e0/0 & tunnel source & & & crypto isakmp \\
+ip address 172.16.1.1 & 192.168.47.100 & ip route 172.32.0.0 & ip dhcp excluded- & policy 10 \\
+255.255.255.0 & tunnel destination & 255.255.0.0 & address 172.16.2.1 & encryption aes 256 \\
+no shutdown & 192.168.47.200 & 10.1.1.2 & 172.16.2.10 & hash sha \\
+ & tunnel mode gre ip & & & authentication \\
+interface e0/1 & no shutdown & ip route 172.32.1.0 & ip dhcp pool LAN1 & pre-share \\
+ip address 172.16.2.1 & & 255.255.255.0 & network 172.16.1.0 & group 2 \\
+255.255.255.0 & & 172.16.2.2 & 255.255.255.0 & lifetime 86400 \\
+no shutdown & & & default-router & \\
+ & & ip route 172.32.0.0 & 172.16.1.1 & interface e0/0 \\
+interface e0/2 & & 255.255.0.0 & dns-server 8.8.8.8 & ip nat inside \\
+ip address & & 172.16.1.2 & & \\
+192.168.47.100 & & & ip dhcp pool LAN2 & interface e0/1 \\
+255.255.255.0 & & & network 172.16.2.0 & ip nat inside \\
+no shutdown & & & 255.255.255.0 & \\
+ & & & default-router & interface e0/2 \\
+ & & & 172.16.2.1 & ip nat outside \\
+ & & & dns-server 8.8.8.8 & crypto map VPN-MAP \\
+\hline
+\end{tabular}
+\caption{Cấu hình chi tiết Router}
+\end{table}
+\newpage
+\textbf{Cấu hình các Switch Leaf}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|p{4cm}|p{4cm}|p{4cm}|p{4cm}|}
+\hline
+\multicolumn{4}{|c|}{Switch Leaf} \\
+
+\hline
+ enable	&interface Ethernet2	   &vrrp 40 ip 10.10.40.254&	   vxlan vlan 60 vni 1060\\
+configure terminal	   &no switchport	   &vrrp 40 priority 100&	   vxlan flood vtep 4.4.4.4 5.5.5.5 6.6.6.6 7.7.7.7 8.8.8.8\\
+hostname LEAF1	   &ip address 192.168.1.26/30	  & vrrp 40 preempt&	ip routing\\
+vlan 1	   &description TO\_Spine2	  & no shutdown&	router bgp 65001\\
+name Management	&interface Vlan10	&interface Vlan50&	   router-id 3.3.3.3\\
+vlan 10	  & ip address 10.10.10.1/24	   &ip address 10.10.50.1/24&	   neighbor 1.1.1.1 remote-as 65000\\
+    name IT	   &vrrp 10 ip 10.10.10.254	   &vrrp 50 ip 10.10.50.254&	   neighbor 2.2.2.2 remote-as 65000\\
+vlan 20	   &vrrp 10 priority 110	   &vrrp 50 priority 100&	   neighbor 192.168.1.1 remote-as 65000 \\
+   name CSKH	  & vrrp 10 preempt	   &vrrp 50 preempt&	   neighbor 192.168.1.25 remote-as 65000\\
+vlan 30	   &no shutdown	   &no shutdown&	   address-family ipv4 \\
+   name Server	&interface Vlan20	&interface Vlan60&	      neighbor 192.168.1.1 activate\\
+vlan 40	  & ip address 10.10.20.1/24	  & ip address 10.10.60.1/24&	      neighbor 192.168.1.25 activate\\
+   name Business	   &vrrp 20 ip 10.10.20.254	   &vrrp 60 ip 10.10.60.254&	      neighbor 1.1.1.1 activate\\
+vlan 50	   &vrrp 20 priority 100	   &vrrp 60 priority 100&	      neighbor 2.2.2.2 activate\\
+   name RandD	   &vrrp 20 preempt	   &vrrp 60 preempt&	   network 3.3.3.3/32\\
+vlan 60	  & no shutdown	  & no shutdown&	   network 10.10.10.0/24\\
+   name Finance	&interface Vlan30	&interface Vxlan1&	   network 10.10.20.0/24\\
+interface Loopback0	  & ip address 10.10.30.1/24	   &vxlan source-interface Loopback0&	   network 10.10.30.0/24\\
+   ip address 3.3.3.3/32	   &vrrp 30 ip 10.10.30.254	   &vxlan udp-port 4789&	   network 10.10.40.0/24\\
+   description LEAF1\_Loopback	 &  vrrp 30 priority 100	&   vxlan vlan 10 vni 1010&	   network 10.10.50.0/24\\
+interface Ethernet1	   &vrrp 30 preempt	   &vxlan vlan 20 vni 1020&	   network 10.10.60.0/24\\
+   no switchport	   &no shutdown	   &vxlan vlan 30 vni 1030&	end\\
+   ip address 192.168.1.2/30	&interface Vlan40	   &vxlan vlan 40 vni 1040&	write memory\\
+   description TO\_Spine1	   &ip address 10.10.40.1/24	 &  vxlan vlan 50 vni 1050&\\
+
+\hline
+\end{tabular}
+\caption{Cấu hình chi tiết các Switch Leaf}
+\end{table}
+\newpage
+\textbf{Cấu hình Switch CORE1}
+\begin{table}[H]
+\centering
+\begin{tabular}{|p{4cm}|p{4cm}|p{4cm}|p{4cm}|}
+\hline
+\multicolumn{4}{|c|}{Switch CORE1} \\
+\hline
+enable&	interface range ethernet 0/0-3&	config ter	&no shut\\
+config ter	&switchport trunk encap dot1q	&interface vlan 1&	exit\\
+hostname Core-1	&switchport mode trunk	&ip address 10.10.1.1 255.255.255.0&	interface vlan 40\\
+vlan 1	&switchport trunk allowed vlan 10,20,30,40,50,60	&no shut	&ip address 10.10.40.1 255.255.255.0\\
+name Managament&	exit&	exit	&vrrp 40 ip 10.10.40.254\\
+exit	&interface range ethernet 1/0-3	&interface vlan 10&	vrrp 40 priority 100\\
+vlan 10	&switchport trunk encap dot1q	&ip address 10.10.10.1 255.255.255.0	&vrrp 40 preempt\\
+name IT	&switchport mode trunk&	vrrp 10 ip 10.10.10.254&	no shut\\
+exit	&switchport trunk allowed vlan 10,20,30,40,50,60	&vrrp 10 priority 110&	exit\\
+vlan 20&	end&	vrrp 10 preempt&	interface vlan 50\\
+name CSKH	&wr&	no shut&	ip address 10.10.50.1 255.255.255.0\\
+exit	&enable	&exit	&vrrp 50 ip 10.10.50.254\\
+vlan 30&	config ter&	interface vlan 20&	vrrp 50 priority 100\\
+name Server&	spanning-tree mode rapid	&ip address 10.10.20.1 255.255.255.0	&vrrp 50 preempt\\
+exit	&spanning-tree vlan 1 root primary	&vrrp 20 ip 10.10.20.254	&no shut\\
+vlan 40	&spanning-tree vlan 10 root primary&	vrrp 20 priority 110	&exit\\
+name Business&	spanning-tree vlan 20 root primary&	vrrp 20 preempt	interface& vlan 60\\
+exit	&spanning-tree vlan 30 root primary	&no shut	&ip address 10.10.60.1 255.255.255.0\\
+vlan 50	&spanning-tree vlan 40 root secondary	&exit&	vrrp 60 ip 10.10.60.254\\
+name RandD	&spanning-tree vlan 50 root secondary	&interface vlan 30	&vrrp 60 priority 100\\
+exit	&spanning-tree vlan 60 root secondary	&ip address 10.10.30.1 255.255.255.0&	vrrp 60 preempt\\
+vlan 60	&end&	vrrp 30 ip 10.10.30.254	&no shut\\
+name Finance&	wr&	vrrp 30 priority 110	&exit\\
+exit	&enable&	vrrp 30 preempt	&end\\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|p{4cm}|p{4cm}|p{4cm}|p{4cm}|}
+\hline
+
+config ter&	ip dhcp pool VLAN30	&ip dhcp pool VLAN60	&interface loopback 0\\
+ip routing	&network 10.10.30.0 255.255.255.0	&network 10.10.60.0 255.255.255.0	&ip address 1.1.1.1 255.255.255.255\\
+end&	default-router 10.10.30.254	&default-router 10.10.60.254	&no shutdown\\
+wr	&dns-server 8.8.8.8	&dns-server 8.8.8.8	&exit\\
+config ter	&exit	&exit&	router ospf 1\\
+ip dhcp pool VLAN10&	ip dhcp pool VLAN40	&ip dhcp excluded-address 10.10.10.1 10.10.10.10&	default-information originate\\
+network 10.10.10.0 255.255.255.0&	network 10.10.40.0 255.255.255.0&	ip dhcp excluded-address 10.10.20.1 10.10.20.10&	router-id 1.1.1.1\\
+default-router 10.10.10.254&	default-router 10.10.40.254	&ip dhcp excluded-address 10.10.30.1 10.10.30.10	&network 10.10.0.0 0.0.255.255 area 0\\
+dns-server 8.8.8.8	&dns-server 8.8.8.8&	ip dhcp excluded-address 10.10.40.1 10.10.40.10&	network 10.10.70.0 0.0.0.255 area 0\\
+exit&	exit&	ip dhcp excluded-address 10.10.50.1 10.10.50.10	&network 172.16.1.0 0.0.0.255 area 0\\
+ip dhcp pool VLAN20	&ip dhcp pool VLAN50	&ip dhcp excluded-address 10.10.60.1 10.10.60.10&	end\\
+network 10.10.20.0 255.255.255.0&	network 10.10.50.0 255.255.255.0	&end	&config ter\\
+default-router 10.10.20.254&	default-router 10.10.50.254	&wr	&ip route 0.0.0.0 0.0.0.0 10.10.10.5\\
+dns-server 8.8.8.8&	dns-server 8.8.8.8	&enable	&end\\
+exit&	exit	&config ter&	wr\\
+\hline
+\end{tabular}
+\caption{Cấu hình chi tiết Switch CORE1}
+\end{table}
+
+\textbf{Cấu hình Switch CORE2}
+\begin{table}[H]
+\centering
+\begin{tabular}{|p{4cm}|p{4cm}|p{4cm}|p{4cm}|}
+\hline
+\multicolumn{4}{|c|}{Switch CORE2} \\
+\hline
+enable	&exit	&name Business	&interface range ethernet 0/0-3\\
+config ter&	vlan 20&	exit&	switchport trunk encap dot1q\\
+hostname Core-2	&name CSKH	&vlan 50&	switchport mode trunk\\
+vlan 1&	exitv	&name RandD&	switchport trunk allowed vlan 10,20,30,40,50,60\\
+name Managament&	vlan 30&	exit	&exit\\
+exit	&name Server	&vlan 60	&interface range ethernet 1/0-3\\
+vlan 10&	exit&	name Finance&	switchport trunk encap dot1q\\
+name IT&	vlan 40	&exit	&switchport mode trunk\\
+\hline
+\end{tabular}
+\end{table}
+\newpage
+\begin{table}[H]
+\centering
+\begin{tabular}{|p{4cm}|p{4cm}|p{4cm}|p{4cm}|}
+\hline
+
+switchport trunk allowed vlan 10,20,30,40,50,60	&vrrp 10 ip 10.10.10.254&	vrrp 40 priority 110	&wr\\
+end	&vrrp 10 priority 100&	vrrp 40 preempt&	config ter\\
+wr&	vrrp 10 preempt&	no shut	&ip dhcp pool VLAN10\\
+enable	&no shut&	exit	&network 10.10.10.0 255.255.255.0\\
+config ter	&exit&	interface vlan 50&	default-router 10.10.10.254\\
+spanning-tree mode rapid&	interface vlan 20&	ip address 10.10.50.2 255.255.255.0	&dns-server 8.8.8.8\\
+spanning-tree vlan 1 root secondary&	ip address 10.10.20.2 255.255.255.0	&vrrp 50 ip 10.10.50.254	&exit\\
+spanning-tree vlan 10 root secondary	&vrrp 20 ip 10.10.20.254&	vrrp 50 priority 110	&ip dhcp pool VLAN20\\
+spanning-tree vlan 20 root secondary&	vrrp 20 priority 100&	vrrp 50 preempt&	network 10.10.20.0 255.255.255.0\\
+spanning-tree vlan 30 root secondary&	vrrp 20 preempt	&no shut	&default-router 10.10.20.254\\
+spanning-tree vlan 40 root primary&	no shut&	exit	&dns-server 8.8.8.8\\
+spanning-tree vlan 50 root primary	&exit&	interface vlan 60	&exit\\
+spanning-tree vlan 60 root primary	&interface vlan 30	&ip address 10.10.60.2 255.255.255.0	&ip dhcp pool VLAN30\\
+end	&ip address 10.10.30.2 255.255.255.0&	vrrp 60 ip 10.10.60.254	&network 10.10.30.0 255.255.255.0\\
+wr	&vrrp 30 ip 10.10.30.254	&vrrp 60 priority 110	&default-router 10.10.30.254\\
+config ter&	vrrp 30 priority 100&	vrrp 60 preempt&	dns-server 8.8.8.8\\
+interface vlan 1&	vrrp 30 preempt&	no shut&	exit\\
+ip address 10.10.1.2 255.255.255.0&	no shut	&exit	&ip dhcp pool VLAN40\\
+no shut	&exit&	end	&network 10.10.40.0 255.255.255.0\\
+exit&	interface vlan 40&	config ter&	default-router 10.10.40.254\\
+interface vlan 10&	ip address 10.10.40.2 255.255.255.0	&ip routing&	dns-server 8.8.8.8\\
+ip address 10.10.10.2 255.255.255.0&	vrrp 40 ip 10.10.40.254&	end	&exit\\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|p{4cm}|p{4cm}|p{4cm}|p{4cm}|}
+\hline
+ip dhcp pool VLAN50&	exit&	enable &	network 10.10.0.0 0.0.255.255 area 0\\
+network 10.10.50.0 255.255.255.0	&ip dhcp excluded-address 10.10.10.1 10.10.10.10	&config ter	&network 10.10.70.0 0.0.0.255 area 0\\
+default-router 10.10.50.254	&ip dhcp excluded-address 10.10.20.1 10.10.20.10&	interface loopback 0	&network 172.16.1.0 0.0.0.255 area 0\\
+dns-server 8.8.8.8&	ip dhcp excluded-address 10.10.30.1 10.10.30.10	&ip address 2.2.2.2 255.255.255.255	&end\\
+exit&	ip dhcp excluded-address 10.10.40.1 10.10.40.10	&no shutdown&config ter\\
+ip dhcp pool VLAN60	&ip dhcp excluded-address 10.10.50.1 10.10.50.10&	exit&	ip route 0.0.0.0 0.0.0.0 10.10.20.5\\
+network 10.10.60.0 255.255.255.0	&ip dhcp excluded-address 10.10.60.1 10.10.60.10	&router ospf 1&	end\\
+default-router 10.10.60.254	&end&	default-information originate&	wr\\
+dns-server 8.8.8.8	&wr	&router-id 2.2.2.2&	\\
+\hline
+\end{tabular}
+\caption{Cấu hình chi tiết Switch CORE2}
+\end{table}
